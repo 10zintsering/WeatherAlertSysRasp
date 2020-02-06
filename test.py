@@ -41,6 +41,16 @@ def key_exists(foo, key): #Function for checking CountryID in warning dictionary
 	"""
 	return 'yes' if key in foo else None
 
+def button_callback(channel): 	#callback function for button event detector 
+	if GPIO.input(RED):	#if the red led is on
+		print("Send warning signal") 
+		print(description1.encode("utf-8"))
+		print(description2.encode("utf-8"))
+	else:
+		print("Alles ist gut: no need to send warning signal")
+
+GPIO.add_event_detect(BUTTON, GPIO.RISING, callback= button_callback) #Interrupt for the button
+
 try:
 	while(True):
     		response = requests.get(url, headers=header)
@@ -63,8 +73,7 @@ try:
         		print("There is no warning: turn on green led")    #when warning doesn't exist 
 			GPIO.output(RED, GPIO.LOW)
 			GPIO.output(GREEN, GPIO.HIGH)
-    
-    		time.sleep(refresh)
+		time.sleep(refresh)
 except KeyboardInterrupt: 
 	print("Shutdown requested...exiting")
 	GPIO.cleanup()
